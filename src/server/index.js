@@ -1,14 +1,12 @@
 import {Server} from './Server.js'
 import {MySqlConnector} from "./connectors/MySqlConnector.js";
+import fs from 'fs'
+import path from 'path'
 
-const connectionOptions = {
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'oma-project-2',
-}
+const __dirname = path.resolve()
+const connectionsOptions = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'connections.json')))
 
-const mySqlConnector = new MySqlConnector(connectionOptions)
+const mySqlConnector = new MySqlConnector(connectionsOptions.mysql_connection)
 mySqlConnector.open(() => {
   console.log('Connection to MySQL successfully opened')
 })
