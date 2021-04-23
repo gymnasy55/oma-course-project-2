@@ -74,3 +74,12 @@ typings/
 
 # FuseBox cache
 .fusebox/
+
+# WebStorm files
+.idea/
+
+# VS Code files
+.vscode/
+
+#VS files
+.vs/
