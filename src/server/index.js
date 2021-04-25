@@ -33,9 +33,8 @@ server.addRoute(new ServerOptions('GET', 'mysql/persons/:id'), (req, res) => {
     if(err) {
       return console.error(`Error: ${err.message}`)
     }
-    const row = rows[0]
-    const person = new Person(row.id, row.fname, row.lname, row.age, row.city, row.phoneNumber, row.email, row.companyName, row.deleted)
-    res.status(200).json(person)
+    const persons = rows.map(row => new Person(row.id, row.fname, row.lname, row.age, row.city, row.phoneNumber, row.email, row.companyName, row.user_id,row.deleted))
+    res.status(200).json(persons)
   })
 })
 
