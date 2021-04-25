@@ -11,4 +11,4 @@ class Person {
   }
 }
 
-export {Person}
+export { Person }

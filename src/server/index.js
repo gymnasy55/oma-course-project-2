@@ -1,25 +1,38 @@
-import {Server} from './Server.js'
-import {MySqlConnector} from "./connectors/MySqlConnector.js";
-import fs from 'fs'
-import path from 'path'
+import { Server } from './Server.js'
+import { ServerOptions } from './service/ServerOptions.js'
+import { MySqlConnector } from './connectors/MySqlConnector.js';
 
-const __dirname = path.resolve()
-const connectionsOptions = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'connections.json')))
+const server = new Server(5000)
 
-const mySqlConnector = new MySqlConnector(connectionsOptions.mysql_connection)
-mySqlConnector.open(() => {
-  console.log('Connection to MySQL successfully opened')
-})
+const connection = new MySqlConnector()
 
-const server = new Server()
-
-server.addRoute({
-  method: 'GET',
-  url: 'users'
-}, (req, res) => {
-  mySqlConnector.query('SELECT * FROM persons', rows => {
-    res.status(200).send(rows);
+server.addRoute(new ServerOptions('GET', 'mysql/persons'), (req, res) => {
+  connection.getAllPersons((err, rows) => {
+    if(err) {
+      return console.error(`Error: ${err.message}`)
+    }
+    res.status(200).json(rows)
   })
 })
 
-server.serve()
+server.addRoute(new ServerOptions('GET', 'mysql/users'), (req, res) => {
+  connection.getAllUsers((err, rows) => {
+    if(err) {
+      return console.error(`Error: ${err.message}`)
+    }
+    res.status(200).json(rows)
+  })
+})
+
+server.addRoute(new ServerOptions('GET', 'mysql/persons/:id'), (req, res) => {
+  connection.getPersonsByUser(Number(req.params.id), (err, rows) => {
+    if(err) {
+      return console.error(`Error: ${err.message}`)
+    }
+    res.status(200).json(rows)
+  })
+})
+
+server.serve(function () {
+  console.log('Server has been started...')
+})

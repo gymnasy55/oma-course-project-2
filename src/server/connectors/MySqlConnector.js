@@ -1,45 +1,57 @@
+import { BaseConnector } from './BaseConnector.js';
 import mysql from 'mysql'
+import fs from 'fs'
+import path from 'path'
 
-class MySqlConnector {
+class MySqlConnector extends BaseConnector {
   #connection
 
-  constructor(options) {
+  constructor() {
+    super()
+    const __dirname = path.resolve()
+    const connections = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'connections.json')))
     this.#connection = mysql.createConnection({
-      host: options.host,
-      user: options.user,
-      password: options.password,
-      database: options.database,
+      ...connections.mysql_connection
     })
+    this.#open()
   }
 
-  open(callback) {
+  #open() {
     this.#connection.connect(err => {
-      if (err) {
-        return console.error(`Error: ${err.message}`)
-      }
-      callback()
-    })
-  }
-
-  query(query, callback) {
-    let result = null;
-    this.#connection.query(query, (err, rows, fields) => {
       if(err) {
         return console.error(`Error: ${err.message}`)
       }
-      result = callback(rows, fields)
+      console.log('Connection to MySQL successfully opened')
     })
-    return result;
   }
 
-  close(callback) {
+  #query(query, func) {
+    this.#connection.query(query, func)
+  }
+
+  close() {
     this.#connection.end(err => {
       if(err) {
         return console.error(`Error: ${err.message}`)
       }
-      callback()
+      console.log('Connection to MySQL successfully closed')
     })
+  }
+
+  getAllPersons(func) {
+    super.getAllPersons();
+    this.#query('SELECT * FROM persons', func)
+  }
+
+  getAllUsers(func) {
+    super.getAllUsers();
+    this.#query('SELECT * FROM users', func)
+  }
+
+  getPersonsByUser(user_id, func) {
+    super.getPersonsByUser();
+    this.#query(`SELECT * FROM persons WHERE user_id=${user_id}`, func)
   }
 }
 
-export {MySqlConnector}
+export { MySqlConnector }

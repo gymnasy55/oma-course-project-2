@@ -1,37 +1,34 @@
-import express, {Router} from 'express'
+import express, { Router } from 'express'
 
 class Server {
   #app
   #PORT
   #router
 
-  constructor() {
+  constructor(PORT) {
+    this.#PORT = PORT || 8080
     this.#app = express()
-    this.#PORT = 8080
     this.#router = Router()
   }
 
-  addRoute(options, callback) {
-    switch (options.method.toUpperCase()) {
+  addRoute(options, func) {
+    switch (options.method) {
       case 'GET':
-        this.#router.get(`/api/${options.url}`, callback)
+        this.#router.get(`/api/${options.url}`, func)
         break
       case 'POST':
-        this.#router.post(`/api/${options.url}`, callback)
+        this.#router.post(`/api/${options.url}`, func)
         break
       case 'DELETE':
-        this.#router.delete(`/api/${options.url}`, callback)
+        this.#router.delete(`/api/${options.url}`, func)
         break
     }
   }
 
-  serve() {
+  serve(func) {
     this.#app.use(this.#router)
-
-    this.#app.listen(this.#PORT, () => {
-      console.log(`Server has been started on ${this.#PORT}...`)
-    })
+    this.#app.listen(this.#PORT, func)
   }
 }
 
-export {Server}
+export { Server }

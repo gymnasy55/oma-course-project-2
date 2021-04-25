@@ -3,6 +3,6 @@
     "host": "localhost",
     "user": "root",
     "password": "root",
-    "database": "oma-project-2"
+    "database": "crud-project"
   }
 }
