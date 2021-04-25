@@ -29,7 +29,7 @@ server.addRoute(new ServerOptions('GET', 'mysql/users'), (req, res) => {
 })
 
 server.addRoute(new ServerOptions('GET', 'mysql/persons/:id'), (req, res) => {
-  connection.getPersonsByUser(Number(req.params.id), (err, rows) => {
+  connection.getPersonsByUserId(Number(req.params.id), (err, rows) => {
     if(err) {
       return console.error(`Error: ${err.message}`)
     }

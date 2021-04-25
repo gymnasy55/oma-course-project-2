@@ -1,8 +1,8 @@
 class BaseConnector {
   getAllPersons() {}
   getAllUsers() {}
-  getPersonsByUser() {}
-  deletePersonById() {}
+  getPersonsByUserId(userId) {}
+  deletePersonById(personId) {}
 }
 
 export { BaseConnector }

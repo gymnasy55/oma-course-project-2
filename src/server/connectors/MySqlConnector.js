@@ -48,14 +48,14 @@ class MySqlConnector extends BaseConnector {
     this.#query('SELECT * FROM users', func)
   }
 
-  getPersonsByUser(user_id, func) {
-    super.getPersonsByUser()
-    this.#query(`SELECT * FROM persons WHERE user_id=${user_id}`, func)
+  getPersonsByUserId(userId, func) {
+    super.getPersonsByUserId()
+    this.#query(`SELECT * FROM persons WHERE user_id=${userId}`, func)
   }
 
-  deletePersonById(person_id, func) {
+  deletePersonById(personId, func) {
     super.deletePersonById()
-    this.#query(`DELETE FROM persons WHERE id=${person_id}`, func)
+    this.#query(`DELETE FROM persons WHERE id=${personId}`, func)
   }
 }
 
