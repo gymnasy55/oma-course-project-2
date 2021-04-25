@@ -1,4 +1,5 @@
 import express, { Router } from 'express'
+import { logger } from './middlewares/logger.js';
 
 class Server {
   #app
@@ -28,6 +29,7 @@ class Server {
   serve(func) {
     this.#app.use(express.json())
     this.#app.use(express.urlencoded({ extended: true }))
+    this.#app.use(logger)
     this.#app.use(this.#router)
     this.#app.listen(this.#PORT, func)
   }
