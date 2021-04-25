@@ -1,0 +1,19 @@
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+	id SERIAL PRIMARY KEY,
+	login VARCHAR NOT NULL,
+    password VARCHAR NOT NULL
+);
+
+DROP TABLE IF EXISTS persons;
+CREATE TABLE persons (
+  id SERIAL PRIMARY KEY,
+  fname VARCHAR NOT NULL,
+  lname VARCHAR NOT NULL,
+  age INT NOT NULL,
+  city VARCHAR NOT NULL,
+  phoneNumber VARCHAR NOT NULL,
+  email VARCHAR NOT NULL,
+  companyName VARCHAR NOT NULL,
+  user_id INT NOT NULL REFERENCES users(id)
+);
