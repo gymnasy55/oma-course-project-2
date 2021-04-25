@@ -20,6 +20,9 @@ class Server {
       case 'POST':
         this.#router.post(`/api/${options.url}`, func)
         break
+      case 'PUT':
+        this.#router.put(`/api/${options.url}`, func)
+        break
       case 'DELETE':
         this.#router.delete(`/api/${options.url}`, func)
         break
