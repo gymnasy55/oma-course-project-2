@@ -53,6 +53,16 @@ class MySqlConnector extends BaseConnector {
     this.#query(`SELECT * FROM persons WHERE user_id=${userId}`, func)
   }
 
+  postPerson(person) {
+    super.postPerson()
+    this.#query(`INSERT INTO persons VALUES (DEFAULT, '${person.fname}', '${person.lname}', ${person.age}, '${person.city}', '${person.phoneNumber}', '${person.email}', '${person.companyName}', '${person.userId}', FALSE)`)
+  }
+
+  postUser(user) {
+    super.postUser()
+    this.#query(`INSERT INTO users VALUE (DEFAULT, '${user.login}', '${user.password}', FALSE`)
+  }
+
   deletePersonById(personId, func) {
     super.deletePersonById()
     this.#query(`DELETE FROM persons WHERE id=${personId}`, func)

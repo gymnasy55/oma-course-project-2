@@ -38,6 +38,34 @@ server.addRoute(new ServerOptions('GET', 'mysql/persons/:id'), (req, res) => {
   })
 })
 
+server.addRoute(new ServerOptions('POST', 'mysql/persons'), (req, res) => {
+  const body = req.body
+  if(body.fname && typeof body.fname === 'string'
+      && body.lname && typeof body.lname === 'string'
+      && body.age && typeof body.age === 'number' && body.age % 1 === 0
+      && body.city && typeof body.city === 'string'
+      && body.phoneNumber && typeof body.phoneNumber === 'string'
+      && body.email && typeof body.email === 'string'
+      && body.companyName && typeof body.companyName === 'string'
+      && body.userId && typeof body.userId === 'number' && body.userId > 0) {
+    connection.postPerson(body)
+    res.status(201).json({message: 'Person creation succeeded'})
+    return
+  }
+  res.status(400).json({message: 'Person creation failed'})
+})
+
+server.addRoute(new ServerOptions('POST', 'mysql/persons'), (req, res) => {
+  const body = req.body
+  if(body.login && typeof body.login === 'string'
+     && body.password && typeof body.password === 'string') {
+    connection.postUser(body)
+    res.status(201).json({message: 'User creation succeeded'})
+    return
+  }
+  res.status(400).json({message: 'User creation failed'})
+})
+
 server.addRoute(new ServerOptions('DELETE', 'mysql/persons/:id'), (req, res) => {
   connection.deletePersonById(Number(req.params.id), err => {
     if(err) {
