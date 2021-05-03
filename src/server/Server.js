@@ -17,10 +17,12 @@ class Server {
     this.#router = Router()
 
     const mySqlConnector = new MySqlConnector()
-    const postgreSqlConnector = new PostgreSqlConnector()
+    const postgreSqlConnector = new PostgreSqlConnector('postgresql')
+    const h2SqlConnector = new PostgreSqlConnector('h2sql')
     this.#enableMySqlUsers(mySqlConnector)
     this.#enableSql(mySqlConnector, 'mysql')
     this.#enableSql(postgreSqlConnector, 'postgresql')
+    this.#enableSql(h2SqlConnector, 'postgresql')
   }
 
   addRoute(options, func) {
