@@ -5,12 +5,20 @@ import { JsonReader } from '../service/JsonReader.js';
 class PostgreSqlConnector extends BaseConnector {
   #connection
 
-  constructor() {
+  constructor(mode) {
     super()
-    const connection = new JsonReader().read('connections.json').postgresql_connection
-    this.#connection = new pg.Client({
-      ...connection
-    })
+    const connection = new JsonReader().read('connections.json')
+    this.mode = mode
+    if(mode === 'h2sql') {
+      this.#connection = new pg.Client({
+        ...connection.h2sql_connection
+      })
+    } else {
+      this.#connection = new pg.Client({
+        ...connection.postgresql_connection
+      })
+    }
+
     this.#open()
   }
 
@@ -19,7 +27,7 @@ class PostgreSqlConnector extends BaseConnector {
       if(err) {
         return console.error(`Error: ${err.message}`)
       }
-      console.log('Connection to PostgreSQL successfully opened')
+      console.log(`Connection to ${this.mode === 'h2sql' ? 'H2' : 'PostgreSQL'} successfully opened`)
     })
   }
 

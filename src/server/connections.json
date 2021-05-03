@@ -12,5 +12,11 @@
     "user": "postgres",
     "password": "root",
     "database": "crud-project"
+  },
+  "h2sql_connection": {
+    "host": "localhost",
+    "user": "root",
+    "password": "root",
+    "database": "crud-project"
   }
 }
