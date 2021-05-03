@@ -7,9 +7,9 @@ class PostgreSqlConnector extends BaseConnector {
 
   constructor() {
     super()
-    const connections = new JsonReader().read('connections.json')
+    const connection = new JsonReader().read('connections.json').postgresql_connection
     this.#connection = new pg.Client({
-      ...connections.postgresql_connection
+      ...connection
     })
     this.#open()
   }
