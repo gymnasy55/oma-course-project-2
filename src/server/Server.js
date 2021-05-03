@@ -20,6 +20,7 @@ class Server {
     const postgreSqlConnector = new PostgreSqlConnector()
     this.#enableMySqlUsers(mySqlConnector)
     this.#enableSql(mySqlConnector, 'mysql')
+    //this.#enableSql(postgreSqlConnector, 'postgresql')
   }
 
   addRoute(options, func) {
@@ -48,6 +49,24 @@ class Server {
         const users = rows.map(row => new User(row.id, row.login, row.password, row.deleted))
         res.status(200).json(users)
       })
+    })
+
+    this.addRoute(new RouteOptions('POST', 'mysql/auth'), (req, res) => {
+      const body = req.body
+      if(typeof body.login === 'string'
+          && typeof body.password === 'string') {
+        connector.getUserByLoginAndPassword(body, (err, rows) => {
+          if(err) {
+            return console.error(`Error: ${err.message}`)
+          }
+          if(rows.length > 0) {
+            res.status(200).json({ message: "Authorized" })
+          } else {
+            res.status(401).json({ message: "Unauthorized" })
+          }
+        })
+      }
+
     })
 
     this.addRoute(new RouteOptions('GET', 'mysql/users/all'), (req, res) => {
@@ -98,6 +117,10 @@ class Server {
         if(err) {
           return console.error(`Error: ${err.message}`)
         }
+        if(rows.hasOwnProperty('rows')) {
+          rows = rows.rows
+        }
+
         const persons = rows.map(row => new Person(row.id, row.fname, row.lname, row.age, row.city, row.phoneNumber, row.email, row.companyName, row.user_id, row.deleted))
         res.status(200).json(persons)
       })
@@ -107,6 +130,9 @@ class Server {
       connector.getAllPersons((err, rows) => {
         if(err) {
           return console.error(`Error: ${err.message}`)
+        }
+        if(rows.hasOwnProperty('rows')) {
+          rows = rows.rows
         }
         const persons = rows.map(row => new Person(row.id, row.fname, row.lname, row.age, row.city, row.phoneNumber, row.email, row.companyName, row.user_id, row.deleted))
         res.status(200).json(persons)
@@ -118,7 +144,24 @@ class Server {
         if(err) {
           return console.error(`Error: ${err.message}`)
         }
+        if(rows.hasOwnProperty('rows')) {
+          rows = rows.rows
+        }
         const persons = rows.map(row => new Person(row.id, row.fname, row.lname, row.age, row.city, row.phoneNumber, row.email, row.companyName, row.user_id,row.deleted))
+        res.status(200).json(persons)
+      })
+    })
+
+    this.addRoute(new RouteOptions('GET', `${dbms}/persons/:id/deleted`), (req, res) => {
+      connector.getDeletedPersonsByUserId(Number(req.params.id), (err, rows) => {
+        if (err) {
+          return console.error(`Error: ${err.message}`)
+        }
+        if (rows.hasOwnProperty('rows')) {
+          rows = rows.rows
+        }
+        const persons = rows.map(row => new Person(row.id, row.fname, row.lname, row.age, row.city, row.phoneNumber,
+          row.email, row.companyName, row.user_id, row.deleted))
         res.status(200).json(persons)
       })
     })

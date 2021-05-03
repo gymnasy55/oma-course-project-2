@@ -1,8 +1,8 @@
 import { BaseModel } from '../BaseModel.js'
 
 class Person extends BaseModel {
-  constructor(id, fname, lname, age, city, phoneNumber, email, companyName, userId, isDeleted) {
-    super(id, isDeleted)
+  constructor(id, fname, lname, age, city, phoneNumber, email, companyName, user_id, deleted) {
+    super(id, deleted)
     this.fname = fname
     this.lname = lname
     this.age = age
@@ -10,7 +10,7 @@ class Person extends BaseModel {
     this.phoneNumber = phoneNumber
     this.email = email
     this.companyName = companyName
-    this.userId = userId
+    this.user_id = user_id
   }
 }
 

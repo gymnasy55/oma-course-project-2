@@ -1,7 +1,7 @@
 class BaseModel {
-  constructor(id, isDeleted) {
+  constructor(id, deleted) {
     this.id = id
-    this.isDeleted = isDeleted
+    this.deleted = deleted
   }
 }
 

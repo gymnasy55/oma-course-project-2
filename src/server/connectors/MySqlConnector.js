@@ -26,7 +26,7 @@ class MySqlConnector extends BaseConnector {
   }
 
   #query(query, func) {
-    this.#connection.query(query, func)
+    this.#connection.query(query, func) // func(err, rows, fields)
   }
 
   close() {
@@ -48,17 +48,14 @@ class MySqlConnector extends BaseConnector {
     this.#query('SELECT * FROM persons WHERE deleted=0', func)
   }
 
-  getAllUsers(func) {
-    this.#query('SELECT * FROM users', func)
-  }
-
-  getUsers(func) {
-    this.#query('SELECT * FROM users WHERE deleted=0', func)
-  }
-
   getPersonsByUserId(userId, func) {
     super.getPersonsByUserId(userId, func)
-    this.#query(`SELECT * FROM persons WHERE user_id=${userId}`, func)
+    this.#query(`SELECT * FROM persons WHERE user_id=${userId} AND deleted=0`, func)
+  }
+
+  getDeletedPersonsByUserId(userId, func) {
+    super.getDeletedPersonsByUserId(userId, func)
+    this.#query(`SELECT * FROM persons WHERE user_id=${userId} AND deleted=1`, func)
   }
 
   postPerson(person, func) {
@@ -71,17 +68,29 @@ class MySqlConnector extends BaseConnector {
     this.#query(`UPDATE persons SET fname='${person.fname}', lname='${person.lname}', age=${person.age}, city='${person.city}', phoneNumber='${person.phoneNumber}', email='${person.email}', companyName='${person.companyName}' WHERE id=${person.id}`, func)
   }
 
+  deletePersonById(personId, func) {
+    super.deletePersonById(personId, func)
+    this.#query(`UPDATE persons SET deleted=1 WHERE id=${personId}`, func)
+  }
+
+  getAllUsers(func) {
+    this.#query('SELECT * FROM users', func)
+  }
+
+  getUserByLoginAndPassword(user, func) {
+    this.#query(`SELECT * FROM users WHERE login='${user.login}' AND password='${user.password}'`, func)
+  }
+
+  getUsers(func) {
+    this.#query('SELECT * FROM users WHERE deleted=0', func)
+  }
+
   postUser(user, func) {
     this.#query(`INSERT INTO users VALUES (DEFAULT, '${user.login}', '${user.password}', FALSE)`, func)
   }
 
   putUser(user, func) {
     this.#query(`UPDATE users SET login='${user.login}', password='${user.password}' WHERE id=${user.id}`, func)
-  }
-
-  deletePersonById(personId, func) {
-    super.deletePersonById(personId, func)
-    this.#query(`UPDATE persons SET deleted=1 WHERE id=${personId}`, func)
   }
 
   deleteUserById(userId, func) {
