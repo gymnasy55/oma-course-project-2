@@ -20,7 +20,7 @@ class Server {
     const postgreSqlConnector = new PostgreSqlConnector()
     this.#enableMySqlUsers(mySqlConnector)
     this.#enableSql(mySqlConnector, 'mysql')
-    //this.#enableSql(postgreSqlConnector, 'postgresql')
+    this.#enableSql(postgreSqlConnector, 'postgresql')
   }
 
   addRoute(options, func) {
