@@ -1,15 +1,13 @@
 import { BaseConnector } from './BaseConnector.js'
 import pg from 'pg'
-import path from 'path'
-import fs from 'fs'
+import { JsonReader } from '../service/JsonReader.js';
 
 class PostgreSqlConnector extends BaseConnector {
   #connection
 
   constructor() {
     super()
-    const __dirname = path.resolve()
-    const connections = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'connections.json')))
+    const connections = new JsonReader().read('connections.json')
     this.#connection = new pg.Client({
       ...connections.postgresql_connection
     })
