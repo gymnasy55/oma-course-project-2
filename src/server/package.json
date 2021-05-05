@@ -20,6 +20,7 @@
   "homepage": "https://github.com/gymnasy55/oma-course-project-2#readme",
   "dependencies": {
     "colors": "^1.4.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
     "pg": "^8.6.0"

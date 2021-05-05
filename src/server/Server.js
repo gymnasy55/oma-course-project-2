@@ -1,10 +1,11 @@
 import express, { Router } from 'express'
-import { logger } from './middlewares/logger.js';
-import { MySqlConnector } from './connectors/MySqlConnector.js';
+import cors from 'cors'
+import { logger } from './middlewares/logger.js'
+import { MySqlConnector } from './connectors/MySqlConnector.js'
 import { PostgreSqlConnector } from './connectors/PostgreSqlConnector.js'
-import { RouteOptions } from './service/RouteOptions.js';
-import { Person } from './models/Person/Person.js';
-import { User } from './models/User/User.js';
+import { RouteOptions } from './service/RouteOptions.js'
+import { Person } from './models/Person/Person.js'
+import { User } from './models/User/User.js'
 
 class Server {
   #app
@@ -215,6 +216,7 @@ class Server {
   serve(func) {
     this.#app.use(express.json())
     this.#app.use(express.urlencoded({ extended: true }))
+    this.#app.use(cors())
     this.#app.use(logger)
     this.#app.use(this.#router)
     this.#app.listen(this.#PORT, func)
