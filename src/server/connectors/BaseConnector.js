@@ -1,14 +1,14 @@
 class BaseConnector {
-  getAllPersons(func) {}
-  getPersons(func) {}
-  getPersonsByUserId(userId, func) {}
-  getDeletedPersonsByUserId(userId, func) {}
+  getAllPersons() {}
+  getPersons() {}
+  getPersonsByUserId(userId) {}
+  getDeletedPersonsByUserId(userId) {}
 
-  postPerson(person, func) {}
+  postPerson(person) {}
 
-  putPerson(person, func) {}
+  putPerson(person) {}
 
-  deletePersonById(personId, func) {}
+  deletePersonById(personId) {}
 }
 
 export { BaseConnector }
