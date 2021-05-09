@@ -18,5 +18,9 @@
     "user": "root",
     "password": "root",
     "database": "crud-project"
+  },
+  "redis_connection": {
+    "host": "localhost",
+    "port": "6379"
   }
 }

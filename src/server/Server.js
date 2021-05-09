@@ -3,6 +3,7 @@ import cors from 'cors'
 import { logger } from './middlewares/logger.js'
 import { MySqlConnector } from './connectors/MySqlConnector.js'
 import { PostgreSqlConnector } from './connectors/PostgreSqlConnector.js'
+import { RedisConnector } from './connectors/RedisConnector.js'
 import { RouteOptions } from './service/RouteOptions.js'
 import { Person } from './models/Person/Person.js'
 import { User } from './models/User/User.js'
@@ -20,10 +21,14 @@ class Server {
     const mySqlConnector = new MySqlConnector()
     const postgreSqlConnector = new PostgreSqlConnector('postgresql')
     const h2SqlConnector = new PostgreSqlConnector('h2sql')
+    const redisConnector = new RedisConnector()
+
     this.#enableMySqlUsers(mySqlConnector)
-    this.#enableSql(mySqlConnector, 'mysql')
-    this.#enableSql(postgreSqlConnector, 'postgresql')
-    this.#enableSql(h2SqlConnector, 'h2sql')
+
+    this.#enableConnector(mySqlConnector, 'mysql')
+    this.#enableConnector(postgreSqlConnector, 'postgresql')
+    this.#enableConnector(h2SqlConnector, 'h2sql')
+    this.#enableConnector(redisConnector, 'redis')
   }
 
   addRoute(options, func) {
@@ -114,7 +119,7 @@ class Server {
     })
   }
 
-  #enableSql(connector, dbms) {
+  #enableConnector(connector, dbms) {
     this.addRoute(new RouteOptions('GET', `${dbms}/persons`), (req, res) => {
       connector.getPersons((err, rows) => {
         if(err) {
