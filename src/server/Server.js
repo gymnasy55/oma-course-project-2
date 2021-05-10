@@ -183,7 +183,7 @@ class Server {
         && body.phoneNumber && typeof body.phoneNumber === 'string'
         && body.email && typeof body.email === 'string'
         && body.companyName && typeof body.companyName === 'string'
-        && body.userId && typeof body.userId === 'number' && body.userId > 0) {
+        && body.user_id && typeof body.user_id === 'number' && body.user_id > 0) {
         connector.postPerson(body)
         res.status(201).json({message: 'Person creation succeeded'})
         return
