@@ -121,7 +121,7 @@ class MongoDbConnector extends BaseConnector {
 
     mongoPerson.save(err => {
       if (err) {
-        return console.error(`Error: ${err.message}`)
+        return console.error(`MongoDB error: ${err.message}`)
       }
     })
   }

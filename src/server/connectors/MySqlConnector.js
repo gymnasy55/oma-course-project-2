@@ -17,7 +17,7 @@ class MySqlConnector extends BaseConnector {
   #open() {
     this.#connection.connect(err => {
       if(err) {
-        return console.error(`Error: ${err.message}`)
+        return console.error(`MySQL error: ${err.message}`)
       }
       console.log('Connection to MySQL successfully opened')
     })

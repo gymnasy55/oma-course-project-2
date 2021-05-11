@@ -13,7 +13,7 @@ class RedisConnector extends BaseConnector {
     this.#client = redis.createClient(connection)
     this.#client.on('ready', err => {
       if (err) {
-        return console.error(`Error: ${err}`)
+        return console.error(`Redis error: ${err}`)
       }
 
       console.log('Connection to Redis successfully opened')

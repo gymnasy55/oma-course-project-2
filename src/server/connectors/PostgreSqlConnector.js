@@ -25,7 +25,7 @@ class PostgreSqlConnector extends BaseConnector {
   #open() {
     this.#connection.connect(err => {
       if(err) {
-        return console.error(`Error: ${err.message}`)
+        return console.error(`PostgreSQL or H2 error: ${err.message}`)
       }
       console.log(`Connection to ${this.mode === 'h2sql' ? 'H2' : 'PostgreSQL'} successfully opened`)
     })
