@@ -1,7 +1,9 @@
 import { Server } from './Server.js'
 
-const server = new Server(5000)
+const PORT = process.env.PORT || 5000
 
-server.serve(function () {
-  console.log('Server has been started...')
+const server = new Server(PORT)
+
+server.serve(() => {
+  console.log(`Server has been started on port ${PORT}...`)
 })
