@@ -4,6 +4,7 @@ import { logger } from './middlewares/logger.js'
 import { MySqlConnector } from './connectors/MySqlConnector.js'
 import { PostgreSqlConnector } from './connectors/PostgreSqlConnector.js'
 import { RedisConnector } from './connectors/RedisConnector.js'
+import { MongoDbConnector } from './connectors/MongoDbConnector.js'
 import { RouteOptions } from './service/RouteOptions.js'
 import { Person } from './models/Person/Person.js'
 import { User } from './models/User/User.js'
@@ -22,6 +23,7 @@ class Server {
     const postgreSqlConnector = new PostgreSqlConnector('postgresql')
     const h2SqlConnector = new PostgreSqlConnector('h2sql')
     const redisConnector = new RedisConnector()
+    const mongoDbConnector = new MongoDbConnector()
 
     this.#enableMySqlUsers(mySqlConnector)
 
@@ -29,6 +31,7 @@ class Server {
     this.#enableConnector(postgreSqlConnector, 'postgresql')
     this.#enableConnector(h2SqlConnector, 'h2sql')
     this.#enableConnector(redisConnector, 'redis')
+    this.#enableConnector(mongoDbConnector, 'mongodb')
   }
 
   addRoute(options, func) {
@@ -125,6 +128,8 @@ class Server {
         if(err) {
           return console.error(`Error: ${err.message}`)
         }
+
+        // Special for PostgreSql
         if(rows.hasOwnProperty('rows')) {
           rows = rows.rows
         }
@@ -193,14 +198,15 @@ class Server {
 
     this.addRoute(new RouteOptions('PUT', `${dbms}/persons`), (req, res) => {
       const body = req.body
-      if (body.id && typeof body.id === 'number'
-        && body.fname && typeof body.fname === 'string'
-        && body.lname && typeof body.lname === 'string'
-        && body.age && typeof body.age === 'number' && body.age % 1 === 0
-        && body.city && typeof body.city === 'string'
-        && body.phoneNumber && typeof body.phoneNumber === 'string'
-        && body.email && typeof body.email === 'string'
-        && body.companyName && typeof body.companyName === 'string') {
+      if ((typeof body.id === 'number' || typeof body.id === 'string')
+        && typeof body.fname === 'string'
+        && typeof body.lname === 'string'
+        && typeof body.age === 'number' && body.age % 1 === 0
+        && typeof body.city === 'string'
+        && typeof body.phoneNumber === 'string'
+        && typeof body.email === 'string'
+        && typeof body.companyName === 'string') {
+        body.id = isNaN(Number(body.id)) ? body.id : Number(body.id)
         connector.putPerson(body)
         res.status(200).json({message: 'Person update succeeded'})
         return
@@ -209,7 +215,7 @@ class Server {
     })
 
     this.addRoute(new RouteOptions('DELETE', `${dbms}/persons/:id`), (req, res) => {
-      connector.deletePersonById(Number(req.params.id), err => {
+      connector.deletePersonById(isNaN(Number(req.params.id)) ? req.params.id : Number(req.params.id), err => {
         if(err) {
           return console.error(`Error: ${err.message}`)
         }

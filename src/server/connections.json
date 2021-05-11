@@ -22,5 +22,8 @@
   "redis_connection": {
     "host": "localhost",
     "port": "6379"
+  },
+  "mongodb_connection": {
+    "url": "mongodb://localhost:27017/crud-project"
   }
 }
