@@ -46,7 +46,7 @@ class RedisConnector extends BaseConnector {
   }
 
   async getDeletedPersonsByUserId(userId, func) {
-    super.getPersonsByUserId(userId)
+    super.getDeletedPersonsByUserId(userId)
 
     const reply = await this.#client.zrange(TABLE, 0, -1)
 
