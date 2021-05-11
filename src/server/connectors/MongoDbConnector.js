@@ -123,8 +123,6 @@ class MongoDbConnector extends BaseConnector {
       if (err) {
         return console.error(`Error: ${err.message}`)
       }
-
-      console.log('MONGO: created successfully!')
     })
   }
 
