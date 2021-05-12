@@ -2,51 +2,9 @@ import mongoose from 'mongoose'
 import { BaseConnector } from './BaseConnector.js'
 import { JsonReader } from '../service/JsonReader.js'
 
-const PersonSchema= new mongoose.Schema({
-  _id: {
-    type: mongoose.Types.ObjectId,
-    required: true
-  },
-  deleted: {
-    type: Number,
-    required: true
-  },
-  fname: {
-    type: String,
-    required: true
-  },
-  lname: {
-    type: String,
-    required: true
-  },
-  age: {
-    type: Number,
-    required: true
-  },
-  city: {
-    type: String,
-    required: true
-  },
-  phoneNumber: {
-    type: String,
-    required: true
-  },
-  email: {
-    type: String,
-    required: true
-  },
-  companyName: {
-    type: String,
-    required: true
-  },
-  user_id: {
-    type: Number,
-    required: true
-  }
-})
-
 class MongoDbConnector extends BaseConnector {
   #connection
+  #PersonSchema
   #PersonModel
 
   constructor() {
@@ -69,7 +27,50 @@ class MongoDbConnector extends BaseConnector {
       console.log('Connection to MongoDB successfully opened')
     })
 
-    this.#PersonModel = this.#connection.model('Person', PersonSchema)
+    this.#PersonSchema = new mongoose.Schema({
+      _id: {
+        type: mongoose.Types.ObjectId,
+        required: true
+      },
+      deleted: {
+        type: Number,
+        required: true
+      },
+      fname: {
+        type: String,
+        required: true
+      },
+      lname: {
+        type: String,
+        required: true
+      },
+      age: {
+        type: Number,
+        required: true
+      },
+      city: {
+        type: String,
+        required: true
+      },
+      phoneNumber: {
+        type: String,
+        required: true
+      },
+      email: {
+        type: String,
+        required: true
+      },
+      companyName: {
+        type: String,
+        required: true
+      },
+      user_id: {
+        type: Number,
+        required: true
+      }
+    })
+
+    this.#PersonModel = this.#connection.model('Person', this.#PersonSchema)
   }
 
   getAllPersons(func) {
